@@ -18,12 +18,19 @@ let now = document.querySelector('.wrapper-hour-now');
 //units for measurements
 const unit = "units=imperial"; //converts APIs weather to Fahrenheit from Kelvin
 const API_KEY = "38fa05b5edfdffe600b9a1faf86df7a1";
+
 // Define the event listener function
 function handleSubmit(e) {
     e.preventDefault(); // Prevent the default form from firing off on refresh
-
-    // Get the input value
-    const inputVal = cityInput.value.trim(); //trim removes extra spaces
+    const getCityCoordinates = ()=> {
+    const cityName = cityInput.value.trim(); // Get the input value
+    if(!cityName) return;
+    const geoCodingAPIurl = (`http://api.openweathermap.org/geo/1.0/zip?zip=E14,GB&appid=${API_KEY}`)
+    console.log(cityName);
+    };
+    
+    
+     //trim removes extra spaces
 
     // Call the fetchWeatherData function
     async function fetchWeatherData() {
