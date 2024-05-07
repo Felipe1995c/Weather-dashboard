@@ -1,0 +1,7 @@
+body {
+    background: linear-gradient(to bottom, #90dffe 0%, #38a3d1 100% );
+    background-size: cover;
+    overflow: hidden;
+    position: relative;
+    background-repeat: no-repeat;
+}
