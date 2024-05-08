@@ -14,79 +14,58 @@ let minTemp = document.querySelector('.min_temp');
 let pressure = document.querySelector('.wrapper-pressure');
 let humidity = document.querySelector('wrapper-humidity');
 let now = document.querySelector('.wrapper-hour-now');
+let cityInput = document.querySelector('#cityInput');
+let searchGobtn = document.querySelector('#search-button');
+// const cityInput = document.querySelector("#cityInput");
+// const searchButton = document.querySelector("#search-button");
 
 //units for measurements
 const unit = "units=imperial"; //converts APIs weather to Fahrenheit from Kelvin
 const API_KEY = "38fa05b5edfdffe600b9a1faf86df7a1";
 
-// Define the event listener function
-function handleSubmit(e) {
-    e.preventDefault(); // Prevent the default form from firing off on refresh
-    const getCityCoordinates = ()=> {
-    const cityName = cityInput.value.trim(); // Get the input value
-    if(!cityName) return;
-    const geoCodingAPIurl = (`http://api.openweathermap.org/geo/1.0/zip?zip=E14,GB&appid=${API_KEY}`)
-    console.log(cityName);
-    };
-    
-    
-     //trim removes extra spaces
 
+
+//trim removes extra spaces
+
+
+const cityName = cityInput.value;
+
+// Add event listener to the form
+form.addEventListener("click", (e) => {
     // Call the fetchWeatherData function
+    const getWeatherDetails = (cityName, lat, lon) => {
+        const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt={cnt}&appid=${API_KEY}`;
+        fetch(WEATHER_API).then(res => res.json()).then(data => {
+            console.log(cityName);
+        }).catch(() => {
+            alert("Error with fetching weather forecast");
+
+        });
+    };
     async function fetchWeatherData() {
-        const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid=${inputVal}`);
-        const data = await response.json();
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=a5c1f970e0d42839c50243aa43263f94&${unit}`);
+        const data = await res.json();
         return data;
     }
 
-
-
-
-
-// Add event listener to the form
-form.addEventListener("submit", handleSubmit);
-
-// Define the fetchWeatherData function
-fetchWeatherData()
-    .then((data) => {
-        console.log(data.list[0].weather[0].icon)
-        data;
-        temperature.textContent = Math.floor(data.list[0].maintemp) + "°F";
-        summary.tectContent = data.list[0].weather[0].description;
-        localStorage.textContent = data.city.name + "," + data.city.country;
-        let icon1 = data.list[0].weather[0].icon;
-        FeelsLike.textContent = "Feels like : " + data.list[0].main.feels_like
-        maxTemp.textContent = "Max : " + data.list[0].main.temp_max
-        minTemp.texContent = "Min : " + data.list[0].main.temp_min
-        pressure.textContent = "Pressure : " + data.list[0].main.pressure
-        humidity.textContent = "Humidity : " + data.list[0].main.humidity
-
-        icon.innerHTML = `<img src="http://openweathermap.org/img/wn/${icon1}.png" style=''/>`;
-    })
-    .catch(() => {
-        // Handle any errors by displaying error message
-        console.error('Error fetching weather data, please try again', error);
-        message.textContent = " ";
-        form.reset();
-        CityInput.focus()
-        //This will reload
-    })
+    const getCityCoordinates = () => {
+        const cityName = cityInput.value.trim(); // Get the input value
+        if (!cityName) return;
+        console.log(cityName);
+        fetch(geoCodes).then(res => res.json()).then(data => {
+            if (!data.length) return alert(`No coordinates found for ${cityName}`);
+            const { name, lat, lon } = data[0];
+            getWeatherDetails(name, lat, lon);
+        }).catch(() => {
+            alert("Try again");
+        })
     }
 
 
-    
-    // .catch(error => {
-    //     // Handle any errors by displaying error message
-    //     console.error('Error fetching weather data, please try again', error);
-    //     message.textContent = " ";
-    //     form.reset();
-    //     CityInput.focus()
-    //     //This will reload
-    // });
+    message.textContent = " ";
+    form.reset();
+    cityInput.focus()
+});
 
-// try {
-//     // Make the API request
-//     const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${inputVal}&appid=a5c1f970e0d42839c50243aa43263f94&${unit}`);
-//     const data = await response.json(); // Parse the JSON response
-//     return data; // Return the data
-// }
+
+
