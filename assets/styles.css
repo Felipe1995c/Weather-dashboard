@@ -1,10 +1,27 @@
 body {
     background: linear-gradient(to bottom, #90dffe 0%, #38a3d1 100% );
     background-size: cover;
-    overflow: hidden;
     position: relative;
     background-repeat: no-repeat;
+    overflow:hidden;
+    
+    
 }
 .wrapper-pressure{
     background-color: grey;
+}
+
+#cityName {
+    text-align: center;
+}
+
+/* .icons {
+    width:200px;
+    display:flex;
+    flex-direction: row;
+} */
+.imgClass { 
+    display:flex;
+    flex-direction: column;
+
 }

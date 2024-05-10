@@ -12,16 +12,26 @@ searchGoBtn.addEventListener("click", getInfo);
 function getInfo() {
     const newName = document.getElementById("cityInput");
     const cityName = document.getElementById("cityName");
-    cityName.innerHTML = "--"+newName.value+"--"
+    cityName.innerHTML = "--"+newName.value.toUpperCase()+"--"
 }
 
 fetch(`https://api.openweathermap.org/data/2.5/forecast?q=london&appid=38fa05b5edfdffe600b9a1faf86df7a1`)
 .then(response => response.json())
 .then(data => {
     for(i=0; i<5; i++){
-        document.getElementById("day" +(i+1)+ "max").innerHTML = ("Max:" + Number(data.list[i].main.temp_max -288.53).toFixed(1)+ "°");
+        document.getElementById("day" +(i+1)+ "max").innerHTML = ("Max:" + Number((data.list[i].main.temp_max -273.15) * 1.8 + 32).toFixed(1)+ "°");
     }
-});
+    for(i=0; i<5; i++){
+        document.getElementById("day" +(i+1)+ "min").innerHTML = ("Min:" + Number((data.list[i].main.temp_min -273.15) * 1.8 + 32).toFixed(1)+ "°");
+    }
+    for (i=0;i<5; i++) {
+        document.getElementByClass("weather1").innerHTML = ("Temp:" + Number((data.list[i].main.temp -273.15) * 1.8 + 32).toFixed(1)+ "°");
+    }
+    for(i=0; i<5; i++){
+        document.getElementById("img" +(i+1)).src="https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon+".png";
+    }
+})
+.catch(error => alert ("Something Went Wrong"))
 
 
 
